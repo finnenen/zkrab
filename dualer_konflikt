@@ -1,0 +1,52 @@
+from machine import ADC, Pin, PWM
+import time
+
+# Setup für ESP8266
+adc = ADC(0)  # Poti an A0 (gibt Werte von 0–1023)
+servo1 = PWM(Pin(5), freq=50)  # D1 = linker Motor
+servo2 = PWM(Pin(4), freq=50)  # D2 = rechter Motor
+
+# Konstante PWM-Werte (angepasst für FS90R)
+STOP = 76             # 1.5 ms (Stillstand)
+FULL_FORWARD = 80    # ca. 2.5 ms (volle Vorwärtsfahrt)
+
+# Mittelwert und Toleranz
+CENTER = 512
+TOLERANCE = 20
+
+def calc_duty(speed):
+    """
+    Konvertiert Speed [0.0–1.0] → PWM Duty für Vorwärtsfahrt
+    """
+    if speed <= 0.05:
+        return STOP
+    return int(STOP + (FULL_FORWARD - STOP) * speed)
+
+while True:
+    pot_val = adc.read()  # Lese Poti-Wert (0–1023)
+    offset = pot_val - CENTER
+
+    # Wenn Poti in Mittelposition (±TOLERANCE), beide stoppen
+    if abs(offset) <= TOLERANCE:
+        left_speed = 0.0
+        right_speed = 0.0
+    else:
+        norm = min(abs(offset) / (512 - TOLERANCE), 1.0)  # normierter Wert 0–1
+
+        if offset > 0:
+            # Poti nach rechts → rechter Motor schneller
+            right_speed = norm
+            left_speed = 1.0 - norm
+        else:
+            # Poti nach links → linker Motor schneller
+            left_speed = norm
+            right_speed = 1.0 - norm
+
+    # PWM-Werte setzen
+    servo1.duty(calc_duty(left_speed))
+    servo2.duty(calc_duty(right_speed))
+
+    # print(calc_duty(left_speed))
+
+    print(f"Poti: {pot_val} -> L: {left_speed:.2f} R: {right_speed:.2f}")
+    time.sleep(0.05)

@@ -1,0 +1,19 @@
+[tool.pyright]
+include = ["."]
+exclude = [
+    ".*",
+    "__*",
+]
+
+# Wichtig: Der Ordner, in dem die Stubs installiert sind
+stubPath = "C:/Users/finn/Coding/Globals/typings"
+typeshedPath = "C:/Users/finn/Coding/Globals/typings"
+
+pythonVersion = "3.6"         # MicroPython-kompatibel
+pythonPlatform = "Linux"      # Auch auf Windows OK – relevant ist das Verhalten des Zielsystems
+
+typeCheckingMode = "basic"
+
+# Optional: Warnmeldungen anpassen
+reportMissingModuleSource = "none"
+reportUnnecessaryTypeIgnoreComment = "error"
