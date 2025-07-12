@@ -8,12 +8,12 @@ servo2 = PWM(Pin(4), freq=50)  # D2 = rechter Motor
 
 # Konstante PWM-Werte (angepasst für FS90R)
 # Servo1 (GPIO 5) - linker Motor
-SERVO1_STOP = 76             # 1.5 ms (Stillstand)
+SERVO1_STOP = 75             # 1.5 ms (Stillstand)
 SERVO1_FULL_FORWARD = 80     # ca. 2.5 ms (volle Vorwärtsfahrt)
 
 # Servo2 (GPIO 4) - rechter Motor  
-SERVO2_STOP = 81             # Angepasst für diesen Servo
-SERVO2_FULL_FORWARD = 85     # Entsprechend angepasst
+SERVO2_STOP = 76             # Angepasst für diesen Servo
+SERVO2_FULL_FORWARD = 81     # Entsprechend angepasst
 
 # Mittelwert und Toleranz
 CENTER = 512
